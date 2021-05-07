@@ -428,7 +428,15 @@ def create_balancer_pool(w3, pool_contract, balancer_factory):
     tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
     # Find pool address from contract event
     receipt = balancer_factory.events.LOG_NEW_POOL().getLogs()
-    pool_address = receipt[0]['args']['pool']
+    # Fix Okexchain issue to deploy balancer pool contract
+    # Balancer pool contract seems unable to call functions
+    p_address = ""
+    if not receipt:
+        p_address = tx_receipt.logs[0].address
+    else:
+        p_address = receipt[0]['args']['pool']
+
+    pool_address = p_address
     balancer = w3.eth.contract(
         address=pool_address,
         abi=pool_contract.abi
