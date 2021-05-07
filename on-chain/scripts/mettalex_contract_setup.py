@@ -57,6 +57,90 @@ def connect(network, account='user'):
         w3.middleware_onion.inject(geth_poa_middleware, layer=0)
         w3.middleware_onion.add(construct_sign_and_send_raw_middleware(admin))
 
+    elif network == 'polygon':
+        config = read_config()
+        os.environ['WEB3_PROVIDER_URI'] = 'https://rpc-mainnet.maticvigil.com/'
+        os.environ['WEB3_CHAIN_ID'] = '137'
+
+        from web3.middleware import construct_sign_and_send_raw_middleware
+        from web3.middleware import geth_poa_middleware
+        from web3.auto import w3
+
+        admin = w3.eth.account.from_key(config[account]['key'])
+        w3.eth.defaultAccount = admin.address
+        w3.middleware_onion.inject(geth_poa_middleware, layer=0)
+        w3.middleware_onion.add(construct_sign_and_send_raw_middleware(admin))
+
+    elif network == 'polygon-testnet':
+        config = read_config()
+        os.environ['WEB3_PROVIDER_URI'] = 'https://rpc-mumbai.maticvigil.com/'
+        os.environ['WEB3_CHAIN_ID'] = '80001'
+
+        from web3.middleware import construct_sign_and_send_raw_middleware
+        from web3.middleware import geth_poa_middleware
+        from web3.auto import w3
+
+        admin = w3.eth.account.from_key(config[account]['key'])
+        w3.eth.defaultAccount = admin.address
+        w3.middleware_onion.inject(geth_poa_middleware, layer=0)
+        w3.middleware_onion.add(construct_sign_and_send_raw_middleware(admin))
+
+    elif network == 'harmony-testnet':
+        config = read_config()
+        os.environ['WEB3_PROVIDER_URI'] = 'https://api.s0.b.hmny.io/'
+        os.environ['WEB3_CHAIN_ID'] = '1666700000'
+
+        from web3.middleware import construct_sign_and_send_raw_middleware
+        from web3.middleware import geth_poa_middleware
+        from web3.auto import w3
+
+        admin = w3.eth.account.from_key(config[account]['harmony-key'])
+        w3.eth.defaultAccount = admin.address
+        w3.middleware_onion.inject(geth_poa_middleware, layer=0)
+        w3.middleware_onion.add(construct_sign_and_send_raw_middleware(admin))
+
+    elif network == 'okexchain-testnet':
+        config = read_config()
+        os.environ['WEB3_PROVIDER_URI'] = 'https://exchaintestrpc.okex.org'
+        os.environ['WEB3_CHAIN_ID'] = '65'
+
+        from web3.middleware import construct_sign_and_send_raw_middleware
+        from web3.middleware import geth_poa_middleware
+        from web3.auto import w3
+
+        admin = w3.eth.account.from_key(config[account]['key'])
+        w3.eth.defaultAccount = admin.address
+        w3.middleware_onion.inject(geth_poa_middleware, layer=0)
+        w3.middleware_onion.add(construct_sign_and_send_raw_middleware(admin))
+
+    elif network == 'avalanche':
+        config = read_config()
+        os.environ['WEB3_PROVIDER_URI'] = 'https://api.avax.network/ext/bc/C/rpc'
+        os.environ['WEB3_CHAIN_ID'] = '43114'
+
+        from web3.middleware import construct_sign_and_send_raw_middleware
+        from web3.middleware import geth_poa_middleware
+        from web3.auto import w3
+
+        admin = w3.eth.account.from_key(config[account]['key'])
+        w3.eth.defaultAccount = admin.address
+        w3.middleware_onion.inject(geth_poa_middleware, layer=0)
+        w3.middleware_onion.add(construct_sign_and_send_raw_middleware(admin))
+
+    elif network == 'avalanche-testnet':
+        config = read_config()
+        os.environ['WEB3_PROVIDER_URI'] = 'https://api.avax-test.network/ext/bc/C/rpc'
+        os.environ['WEB3_CHAIN_ID'] = '43113'
+
+        from web3.middleware import construct_sign_and_send_raw_middleware
+        from web3.middleware import geth_poa_middleware
+        from web3.auto import w3
+
+        admin = w3.eth.account.from_key(config[account]['key'])
+        w3.eth.defaultAccount = admin.address
+        w3.middleware_onion.inject(geth_poa_middleware, layer=0)
+        w3.middleware_onion.add(construct_sign_and_send_raw_middleware(admin))
+
     elif network == 'kovan':
         config = read_config()
         os.environ['WEB3_INFURA_PROJECT_ID'] = config['infura']['project_id']
@@ -372,6 +456,14 @@ def get_network(w3):
         network = 'kovan'
     elif chain_id == 95:
         network = 'bsc-testnet'
+    elif chain_id == 80001:
+        network = 'polygon-testnet'
+    elif chain_id == 1666700000:
+        network = 'harmony-testnet'
+    elif chain_id == 65:
+        network = 'okexchain-testnet'
+    elif chain_id == 43113:
+        network = 'avalanche-testnet'                           
     return network
 
 
@@ -1009,7 +1101,7 @@ if __name__ == '__main__':
     )
     parser.add_argument(
         '--network', '-n', dest='network', default='local',
-        help='For connecting to local, kovan, bsc-testnet or bsc-mainnet network'
+        help='For connecting to local, kovan, polygon, harmony-testnet, okexchain-testnet, avalanche-testnet and bsc-testnet or bsc-mainnet network'
     )
     parser.add_argument(
         '--strategy', '-v', dest='strategy', default=1,
@@ -1017,7 +1109,7 @@ if __name__ == '__main__':
     )
 
     args = parser.parse_args()
-    assert args.network in {'local', 'kovan', 'bsc-testnet', 'bsc-mainnet'} or is_ipv4_socket_address(args.network)
+    assert args.network in {'local', 'kovan', 'bsc-testnet', 'bsc-mainnet', 'polygon', 'polygon-testnet', 'harmony-testnet', 'okexchain-testnet', 'avalanche-testnet'} or is_ipv4_socket_address(args.network)
     assert args.strategy in {'1', '2', '3', '4'}
 
     w3, admin = connect(args.network, 'admin')

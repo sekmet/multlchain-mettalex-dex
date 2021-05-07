@@ -16,3 +16,23 @@ to set position token prices in line with the underlying asset price.
 
 
 ![Mettalex Outline](mettalex_diagram_outlines_v9p3_white.png "Mettalex Outline")
+
+
+## Changelog
+
+05-05-2021 - Added Polygon(matic) Mainnet and Testnet deploy support to "mettalex_contract_setup.py" script
+05-05-2021 - Added Harmony Mainnet and Testnet deploy support to "mettalex_contract_setup.py" script
+05-05-2021 - Added Avalanche Mainnet and Testnet deploy support to "mettalex_contract_setup.py" script
+05-05-2021 - OKExChain Error
+---------------------------------------------------------
+Deploying contracts
+Traceback (most recent call last):
+  File "mettalex_contract_setup.py", line 1094, in <module>
+    w3, admin, deployed_contracts = full_setup(
+  File "mettalex_contract_setup.py", line 509, in full_setup
+    deployed_contracts = deploy(w3, contracts)
+  File "mettalex_contract_setup.py", line 326, in deploy
+    balancer = create_balancer_pool(w3, contracts['BPool'], balancer_factory)
+  File "mettalex_contract_setup.py", line 403, in create_balancer_pool
+    pool_address = receipt[0]['args']['pool']
+IndexError: tuple index out of range
